@@ -1,6 +1,6 @@
 import { initializeApp } from "https://www.gstatic.com/firebasejs/11.10.0/firebase-app.js";
 import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut, onAuthStateChanged, updateProfile } from "https://www.gstatic.com/firebasejs/11.10.0/firebase-auth.js";
-import { getFirestore, doc, setDoc, getDoc, collection, addDoc, getDocs, query, where, orderBy, serverTimestamp, limit, updateDoc } from "https://www.gstatic.com/firebasejs/11.10.0/firebase-firestore.js";
+import { getFirestore, doc, setDoc, getDoc, collection, addDoc, getDocs, query, where, serverTimestamp, limit, updateDoc } from "https://www.gstatic.com/firebasejs/11.10.0/firebase-firestore.js";
 import { firebaseConfig, isFirebaseConfigured } from "./firebase-config.js";
 
 let app, auth, db;
@@ -28,6 +28,12 @@ export async function getUserProfile(uid) {
   return snapshot.exists() ? snapshot.data() : null;
 }
 const mapDocs = snapshot => snapshot.docs.map(item => ({ id: item.id, ...item.data() }));
+function newestFirst(items) {
+  return items.sort((a, b) => {
+    const time = value => value?.toMillis ? value.toMillis() : (value instanceof Date ? value.getTime() : 0);
+    return time(b.createdAt) - time(a.createdAt);
+  });
+}
 
 // ShareU stores academic contributions as text and metadata only; no file uploads or Storage dependency.
 export async function publishPost({ title, subject, university, career, type, content, description = "", user }) {
@@ -41,13 +47,17 @@ export async function publishPost({ title, subject, university, career, type, co
   return { id: created.id, ...record };
 }
 export async function listApprovedDocuments() {
-  return mapDocs(await getDocs(query(collection(db, "documents"), where("status", "==", "approved"), orderBy("createdAt", "desc"), limit(200))));
+  const snapshot = await getDocs(query(collection(db, "documents"), where("status", "==", "approved"), limit(200)));
+  return newestFirst(mapDocs(snapshot));
 }
 export async function listOwnDocuments(uid) {
-  return mapDocs(await getDocs(query(collection(db, "documents"), where("ownerUid", "==", uid), orderBy("createdAt", "desc"), limit(200))));
+  const snapshot = await getDocs(query(collection(db, "documents"), where("ownerUid", "==", uid), limit(200)));
+  return newestFirst(mapDocs(snapshot));
 }
 export async function listPendingDocuments() {
-  return mapDocs(await getDocs(query(collection(db, "documents"), where("status", "==", "pending"), orderBy("createdAt", "desc"), limit(200))));
+  // Sort in the browser to avoid requiring a composite Firestore index for status + createdAt.
+  const snapshot = await getDocs(query(collection(db, "documents"), where("status", "==", "pending"), limit(200)));
+  return newestFirst(mapDocs(snapshot));
 }
 export async function moderateDocument(id, status) {
   if (!["approved", "rejected"].includes(status)) throw new Error("Invalid moderation status");
