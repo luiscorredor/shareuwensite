@@ -3,8 +3,58 @@
 <head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Panel | shareU</title><link rel="stylesheet" href="style.css">
 <style>
 .contenedor{max-width:1000px;margin:auto;padding:32px 24px}.tarjeta{background:var(--pizarra-suave);padding:22px;border:1px solid #ffffff20;border-radius:10px;margin:18px 0}.form-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}.form-grid input,.form-grid select,.form-grid textarea{width:100%;padding:11px;border:1px solid #ffffff35;border-radius:5px;background:#193126;color:var(--tiza);font:inherit}.form-grid textarea,.form-grid button{grid-column:1/-1}.form-grid textarea{min-height:160px}.form-grid button{padding:12px;background:var(--acento);border:0;border-radius:5px;font-weight:700;cursor:pointer}.documento{padding:16px 0;border-bottom:1px solid #ffffff25;display:flex;gap:14px;align-items:flex-start;justify-content:space-between;flex-wrap:wrap}.documento button{margin:4px;padding:8px 12px;cursor:pointer}.estado{color:var(--acento);min-height:1.4em}.etiqueta{font-size:.8rem;padding:4px 8px;border:1px solid #ffffff40;border-radius:4px}.contenido{white-space:pre-wrap;overflow-wrap:anywhere;max-width:700px}.nota{opacity:.85}@media(max-width:650px){.form-grid{grid-template-columns:1fr}.form-grid textarea,.form-grid button{grid-column:auto}}
+
+/* Contraste y legibilidad para los paneles de usuario y administración */
+body.panel-app { background: var(--pizarra); color: var(--tiza); }
+.panel-app main.contenedor {
+  max-width: 1100px; margin: 28px auto; padding: 32px;
+  background: #f7f5ec; color: #20392d; border-radius: 16px;
+  min-height: 60vh; box-shadow: 0 12px 35px #10251b55;
+}
+.panel-app h1, .panel-app h2, .panel-app h3 { color: #20392d; }
+.panel-app #descripcionPanel, .panel-app .nota { color: #46584c; opacity: 1; }
+.panel-app .tarjeta {
+  background: #fffdf6; color: #20392d; border: 1px solid #d7d3c4;
+  border-radius: 14px; box-shadow: 0 4px 14px #20392d0d;
+}
+.panel-app .tarjeta p, .panel-app .tarjeta small,
+.panel-app .tarjeta strong, .panel-app .documento { color: #20392d; }
+.panel-app .form-grid input, .panel-app .form-grid select,
+.panel-app .form-grid textarea {
+  background: #ffffff; color: #1e3027; border: 1px solid #9aa99b;
+  border-radius: 8px; min-height: 44px;
+}
+.panel-app .form-grid textarea { min-height: 145px; }
+.panel-app .form-grid input::placeholder,
+.panel-app .form-grid textarea::placeholder { color: #5d6c61; opacity: 1; }
+.panel-app .form-grid select option { background: #ffffff; color: #1e3027; }
+.panel-app .form-grid input:focus, .panel-app .form-grid select:focus,
+.panel-app .form-grid textarea:focus {
+  outline: 3px solid #e8b94e88; border-color: #9a6b00;
+}
+.panel-app .form-grid button, .panel-app .documento button {
+  background: #dcae36; color: #1f3328; border: 1px solid #bd8b16;
+  border-radius: 8px; font-weight: 700; min-height: 42px;
+}
+.panel-app .form-grid button:hover, .panel-app .documento button:hover {
+  background: #f0c95f;
+}
+.panel-app button:disabled { opacity: .6; cursor: wait; }
+.panel-app .documento { border-bottom: 1px solid #d5d2c6; padding: 18px 0; }
+.panel-app .etiqueta { color: #243b2e; background: #e8efdf; border-color: #8ba18d; }
+.panel-app .estado { color: #245b37; font-weight: 600; }
+.panel-app .topbar { color: var(--tiza); }
+.panel-app .topbar #identidad { color: #f1efe4; }
+.panel-app .modo-btn { color: #f1efe4; border-color: #c9cfc4; }
+.panel-app .modo-btn:hover { color: #f0c95f; border-color: #f0c95f; }
+@media(max-width:650px) {
+  .panel-app main.contenedor { margin: 14px 10px; padding: 20px 16px; }
+  .panel-app .topbar { gap: 12px; padding: 16px; }
+  .panel-app #identidad { overflow-wrap: anywhere; }
+}
+
 </style></head>
-<body>
+<body class="panel-app">
 <header class="topbar"><a class="brand" href="index.html" style="color:inherit;text-decoration:none">shareU · Panel</a><span id="identidad"></span><button id="salir" class="modo-btn">Cerrar sesión</button></header>
 <main class="contenedor"><h1 id="tituloPanel">Panel de usuario</h1><p id="descripcionPanel">Comparte apuntes, ejercicios y material académico escribiendo el contenido directamente. ShareU no sube archivos.</p>
 <section class="tarjeta" id="seccionPublicar"><h2>Publicar material académico</h2><form id="publicacion" class="form-grid">
