@@ -1,12 +1,13 @@
-// Copia aquí la configuración de tu proyecto Firebase (Firebase Console > Project settings > Your apps).
-// No pongas claves privadas de cuentas de servicio en archivos del navegador.
+// Configuración de la aplicación web ShareU.
+// Completa apiKey con el valor de Firebase Console antes de probar el registro.
 export const firebaseConfig = {
   apiKey: "REEMPLAZAR_API_KEY",
-  authDomain: "REEMPLAZAR_PROJECT_ID.firebaseapp.com",
-  projectId: "REEMPLAZAR_PROJECT_ID",
-  storageBucket: "REEMPLAZAR_PROJECT_ID.firebasestorage.app",
-  messagingSenderId: "REEMPLAZAR_SENDER_ID",
-  appId: "REEMPLAZAR_APP_ID"
+  authDomain: "shareu-96e84.firebaseapp.com",
+  projectId: "shareu-96e84",
+  storageBucket: "shareu-96e84.firebasestorage.app",
+  messagingSenderId: "552313986658",
+  appId: "1:552313986658:web:b337efb3028b33371bfb3b",
+  measurementId: "G-X6J37P0WDH"
 };
 
 export const isFirebaseConfigured = !Object.values(firebaseConfig).some(
