@@ -19,8 +19,9 @@ service cloud.firestore {
     }
 
     match /documents/{documentId} {
-      allow read: if signedIn() && (resource.data.status == 'approved' ||
-        resource.data.ownerUid == request.auth.uid || isAdmin());
+      // Approved metadata is public; private/pending records are restricted.
+      allow read: if resource.data.status == 'approved' ||
+        (signedIn() && (resource.data.ownerUid == request.auth.uid || isAdmin()));
       allow create: if signedIn() &&
         request.resource.data.ownerUid == request.auth.uid &&
         request.resource.data.status == 'pending';
