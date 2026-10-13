@@ -49,11 +49,13 @@ ingreso.addEventListener('submit',async e=>{
  button.disabled=true;
  estado.textContent='Comprobando el acceso en Firebase…';
  try{
-  const {isFirebaseConfigured,loginUser}=await import('./firebase-service.js');
+  const {isFirebaseConfigured,loginUser,getUserProfile}=await import('./firebase-service.js');
   if(!isFirebaseConfigured) throw new Error('firebase-config.js no tiene una configuración completa.');
-  await loginUser(data.email,data.password);
-  estado.textContent='Acceso correcto. Abriendo el panel…';
-  location.assign('./panel.html');
+  const user=await loginUser(data.email,data.password);
+  const profile=await getUserProfile(user.uid);
+  if(!profile){throw new Error('La cuenta inició sesión, pero no existe su perfil en Firestore (users/'+user.uid+').');}
+  estado.textContent=profile.role==='admin'?'Acceso de administrador correcto. Abriendo administración…':'Acceso correcto. Abriendo tu panel…';
+  location.assign(profile.role==='admin'?'./panel.html?view=admin':'./panel.html');
  }catch(err){
   console.error('Error al iniciar sesión en ShareU:',err);
   estado.textContent=mensaje(err);
