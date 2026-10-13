@@ -11,5 +11,18 @@ const estado=document.querySelector('#estado');
 if(!isFirebaseConfigured){estado.textContent='Falta configurar firebase-config.js con los datos de tu proyecto Firebase.';}
 document.querySelector('#registro').addEventListener('submit',async e=>{e.preventDefault();const f=e.currentTarget;const d=Object.fromEntries(new FormData(f));try{await registerUser(d);location.href='panel.html';}catch(err){estado.textContent=mensaje(err);}});
 document.querySelector('#ingreso').addEventListener('submit',async e=>{e.preventDefault();const d=Object.fromEntries(new FormData(e.currentTarget));try{await loginUser(d.email,d.password);location.href='panel.html';}catch(err){estado.textContent=mensaje(err);}});
-function mensaje(e){return ({'auth/email-already-in-use':'Ese correo ya tiene una cuenta.','auth/invalid-credential':'Correo o contraseña incorrectos.','auth/weak-password':'Usa una contraseña de al menos 6 caracteres.','auth/invalid-email':'El correo no es válido.','auth/operation-not-allowed':'Activa Email/Password en Firebase Authentication.'})[e.code]||'No se pudo completar la operación. Revisa Firebase y vuelve a intentar.';}
+function mensaje(e){
+ const code=e?.code||'sin-codigo';
+ const mensajes={
+  'auth/email-already-in-use':'Ese correo ya tiene una cuenta en Authentication. No vuelvas a registrarte; intenta iniciar sesión.',
+  'auth/invalid-credential':'Correo o contraseña incorrectos.',
+  'auth/weak-password':'Usa una contraseña de al menos 6 caracteres.',
+  'auth/invalid-email':'El correo no es válido.',
+  'auth/operation-not-allowed':'Activa Email/Password en Firebase Authentication.',
+  'permission-denied':'Firebase rechazó la escritura en Firestore. Revisa y publica las reglas de firestore.rules.',
+  'unavailable':'Firebase no está disponible ahora. Comprueba tu conexión e inténtalo otra vez.',
+  'failed-precondition':'Firestore necesita configuración adicional; revisa el mensaje de error en la consola.'
+ };
+ return (mensajes[code]||'No se pudo completar la operación.')+' Código: '+code+(e?.message?' — '+e.message:'');
+}
 </script></body></html>
