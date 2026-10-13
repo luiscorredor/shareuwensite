@@ -1,7 +1,13 @@
-// Configuración de la aplicación web ShareU.
-// Completa apiKey con el valor de Firebase Console antes de probar el registro.
-export const firebaseConfig = {
-  apiKey: "REEMPLAZAR_API_KEY",
+// Import the functions you need from the SDKs you need
+import { initializeApp } from "firebase/app";
+import { getAnalytics } from "firebase/analytics";
+// TODO: Add SDKs for Firebase products that you want to use
+// https://firebase.google.com/docs/web/setup#available-libraries
+
+// Your web app's Firebase configuration
+// For Firebase JS SDK v7.20.0 and later, measurementId is optional
+const firebaseConfig = {
+  apiKey: "AIzaSyCqW1eltZJ_Xo0ks3_eF9tpJsfCny0oUGg",
   authDomain: "shareu-96e84.firebaseapp.com",
   projectId: "shareu-96e84",
   storageBucket: "shareu-96e84.firebasestorage.app",
@@ -10,6 +16,6 @@ export const firebaseConfig = {
   measurementId: "G-X6J37P0WDH"
 };
 
-export const isFirebaseConfigured = !Object.values(firebaseConfig).some(
-  value => typeof value === "string" && value.startsWith("REEMPLAZAR_")
-);
+// Initialize Firebase
+const app = initializeApp(firebaseConfig);
+const analytics = getAnalytics(app);
